@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Listado de Préstamos</h2>
+<a href="{{ url_for('main.nuevo_prestamo') }}" class="btn btn-primary mb-3">Nuevo Préstamo</a>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Libro</th>
+            <th>Usuario</th>
+            <th>Fecha Préstamo</th>
+            <th>Fecha Límite</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for prestamo in prestamos %}
+        <tr>
+            <td>{{ prestamo.id }}</td>
+            <td>{{ prestamo.libro.titulo }}</td>
+            <td>{{ prestamo.usuario.nombre }} {{ prestamo.usuario.apellido }}</td>
+            <td>{{ prestamo.fecha_prestamo.strftime('%d/%m/%Y') }}</td>
+            <td>{{ prestamo.fecha_limite.strftime('%d/%m/%Y') }}</td>
+            <td>
+                {% if prestamo.estado == 'activo' %}
+                    {% if prestamo.fecha_limite < datetime.now() %}
+                        <span class="badge badge-danger">Vencido</span>
+                    {% else %}
+                        <span class="badge badge-success">Activo</span>
+                    {% endif %}
+                {% else %}
+                    <span class="badge badge-secondary">Devuelto</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if prestamo.estado == 'activo' %}
+                <a href="{{ url_for('main.devolver_prestamo', id=prestamo.id) }}" class="btn btn-sm btn-info">Devolver</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

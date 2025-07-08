@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Editar Libro</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.titulo.label }}
+        {{ form.titulo(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.autor.label }}
+        {{ form.autor(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.isbn.label }}
+        {{ form.isbn(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.editorial.label }}
+        {{ form.editorial(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.año_publicacion.label }}
+        {{ form.año_publicacion(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.categoria.label }}
+        {{ form.categoria(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.ejemplares.label }}
+        {{ form.ejemplares(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.disponibles.label }}
+        {{ form.disponibles(class="form-control") }}
+    </div>
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+    <a href="{{ url_for('main.listar_libros') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

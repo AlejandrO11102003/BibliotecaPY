@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Registrar Devolución</h2>
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Detalles del Préstamo</h5>
+        <p><strong>Libro:</strong> {{ prestamo.libro.titulo }}</p>
+        <p><strong>Usuario:</strong> {{ prestamo.usuario.nombre }} {{ prestamo.usuario.apellido }}</p>
+        <p><strong>Fecha Préstamo:</strong> {{ prestamo.fecha_prestamo.strftime('%d/%m/%Y') }}</p>
+        <p><strong>Fecha Límite:</strong> {{ prestamo.fecha_limite.strftime('%d/%m/%Y') }}</p>
+    </div>
+</div>
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.fecha_devolucion.label }}
+        {{ form.fecha_devolucion(class="form-control") }}
+    </div>
+    <button type="submit" class="btn btn-primary">Registrar Devolución</button>
+    <a href="{{ url_for('main.listar_prestamos') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

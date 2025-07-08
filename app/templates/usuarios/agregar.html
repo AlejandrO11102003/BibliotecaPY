@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Agregar Nuevo Usuario</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.nombre.label }}
+        {{ form.nombre(class="form-control") }}
+        {% for error in form.nombre.errors %}
+        <small class="text-danger">{{ error }}</small>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        {{ form.apellido.label }}
+        {{ form.apellido(class="form-control") }}
+        {% for error in form.apellido.errors %}
+        <small class="text-danger">{{ error }}</small>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        {{ form.email.label }}
+        {{ form.email(class="form-control") }}
+        {% for error in form.email.errors %}
+        <small class="text-danger">{{ error }}</small>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        {{ form.telefono.label }}
+        {{ form.telefono(class="form-control") }}
+        {% for error in form.telefono.errors %}
+        <small class="text-danger">{{ error }}</small>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        {{ form.direccion.label }}
+        {{ form.direccion(class="form-control") }}
+        {% for error in form.direccion.errors %}
+        <small class="text-danger">{{ error }}</small>
+        {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+    <a href="{{ url_for('main.listar_usuarios') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

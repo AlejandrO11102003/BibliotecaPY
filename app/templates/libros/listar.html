@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Listado de Libros</h2>
+<a href="{{ url_for('main.agregar_libro') }}" class="btn btn-primary mb-3">Agregar Libro</a>
+
+<div class="mb-3">
+    <input type="text" class="form-control table-search" data-table="tabla-libros" placeholder="Buscar...">
+</div>
+
+<table class="table table-striped" id="tabla-libros">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>ISBN</th>
+            <th>Disponibles</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for libro in libros %}
+        <tr>
+            <td>{{ libro.id }}</td>
+            <td>{{ libro.titulo }}</td>
+            <td>{{ libro.autor }}</td>
+            <td>{{ libro.isbn }}</td>
+            <td>{{ libro.disponibles }} / {{ libro.ejemplares }}</td>
+            <td>
+                <div class="btn-group" role="group">
+                    <a href="{{ url_for('main.editar_libro', id=libro.id) }}" class="btn btn-sm btn-warning">Editar</a>
+                    <form action="{{ url_for('main.eliminar_libro', id=libro.id) }}" method="POST" class="ml-2">
+                        <button type="submit" class="btn btn-sm btn-danger" 
+                                onclick="return confirm('¿Estás seguro de eliminar este libro? Esta acción no se puede deshacer.')">
+                            Eliminar
+                        </button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Confirmación antes de eliminar
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteForms = document.querySelectorAll('form[action*="/eliminar/"]');
+    deleteForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            if (!confirm('¿Estás seguro de eliminar este libro? Esta acción no se puede deshacer.')) {
+                e.preventDefault();
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

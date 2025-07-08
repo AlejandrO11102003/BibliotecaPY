@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Reportes de la Biblioteca</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Resumen General</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Total de Libros
+                        <span class="badge badge-primary badge-pill">{{ total_libros }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Total de Usuarios
+                        <span class="badge badge-primary badge-pill">{{ total_usuarios }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Préstamos Activos
+                        <span class="badge badge-success badge-pill">{{ prestamos_activos }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Préstamos Devueltos
+                        <span class="badge badge-secondary badge-pill">{{ prestamos_devueltos }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Préstamos Vencidos
+                        <span class="badge badge-danger badge-pill">{{ prestamos_vencidos }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Libros más populares</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="librosChart" width="100%" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <div class="card">
+        <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">Préstamos recientes</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Libro</th>
+                        <th>Usuario</th>
+                        <th>Fecha Préstamo</th>
+                        <th>Fecha Límite</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for prestamo in prestamos_recientes %}
+                    <tr>
+                        <td>{{ prestamo.libro.titulo }}</td>
+                        <td>{{ prestamo.usuario.nombre }} {{ prestamo.usuario.apellido }}</td>
+                        <td>{{ prestamo.fecha_prestamo.strftime('%d/%m/%Y') }}</td>
+                        <td>{{ prestamo.fecha_limite.strftime('%d/%m/%Y') }}</td>
+                        <td>
+                            {% if prestamo.estado == 'activo' %}
+                                {% if prestamo.fecha_limite < datetime.now() %}
+                                    <span class="badge badge-danger">Vencido</span>
+                                {% else %}
+                                    <span class="badge badge-success">Activo</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="badge badge-secondary">Devuelto</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('librosChart');
+    
+    // Verifica si tenemos datos antes de crear el gráfico
+    if (ctx) {
+        const chartData = {
+            labels: {{ libros_labels|tojson|safe }},
+            datasets: [{
+                label: 'Préstamos por libro',
+                data: {{ libros_data|tojson|safe }},
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: chartData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Libros más prestados'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+        
+        console.log('Gráfico creado con datos:', chartData);
+    } else {
+        console.error('No se encontró el elemento canvas para el gráfico');
+    }
+});
+</script>
+{% endblock %}
