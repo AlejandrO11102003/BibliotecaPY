@@ -1,23 +1,312 @@
+/* Paleta general: blanco predominante, detalles en negro */
 body {
-    
-   
+    background: #fff;
+    color: #111;
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
     margin: 0;
+    min-height: 100vh;
+}
+
+.container, .jumbotron, .card, .form-control, .table, .modal-content {
+    background: #fff !important;
+    color: #111 !important;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid #1111;
+}
+
+.navbar {
+    background: #111 !important;
+    border-bottom: 2px solid #111;
+}
+
+.navbar .navbar-brand, .navbar .nav-link {
+    color: #fff !important;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.navbar .nav-link.active, .navbar .nav-link:hover {
+    color: #e0e0e0 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #111;
+    font-weight: 600;
 }
 
 .jumbotron {
-    background-color: #f8f9fa;
-    padding: 2rem 2rem;
+    background: #fff !important;
+    border-radius: 12px;
+    padding: 2.5rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #1111;
 }
 
 .table {
-    margin-top: 20px;
+    background: #fff;
+    color: #111;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #1111;
 }
 
-.form-group {
-    margin-bottom: 15px;
+.table thead {
+    background: #000000 !important;
+    color: #fff;
+    border-bottom: 2px solid #111;
 }
 
+.table-striped tbody tr:nth-of-type(odd) {
+    background: #fff;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background: #f5f5f5;
+}
+
+th, td {
+    vertical-align: middle !important;
+}
+
+.btn-primary {
+    background: #111 !important;
+    border: none;
+    color: #fff !important;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background: #333 !important;
+    color: #fff !important;
+}
+
+.btn-secondary {
+    background: #fff !important;
+    color: #111 !important;
+    border: 1px solid #111;
+    font-weight: 500;
+    border-radius: 6px;
+}
+
+.btn-warning, .btn-danger, .btn-info, .btn-success {
+    background: #111 !important;
+    color: #fff !important;
+    border: none;
+    filter: none;
+}
+
+.form-control, .form-control-file {
+    background: #fff;
+    color: #111;
+    border: 1px solid #111;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.form-control:focus {
+    background: #f5f5f5;
+    color: #111;
+    border-color: #111;
+    box-shadow: 0 0 0 2px #1112;
+}
+
+label {
+    color: #111;
+    font-weight: 500;
+}
 
 .alert {
-    margin-top: 20px;
+    background: #fff;
+    color: #111;
+    border: 1px solid #111;
+    border-radius: 8px;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #1111;
+    border-radius: 10px;
+    color: #111;
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background: #111 !important;
+    color: #fff !important;
+    border-bottom: 1px solid #111;
+    border-radius: 10px 10px 0 0;
+}
+
+.badge, .badge-primary, .badge-success, .badge-secondary, .badge-danger, .badge-warning {
+    background: #111 !important;
+    color: #fff !important;
+    border-radius: 6px;
+    font-size: 0.95em;
+    font-weight: 500;
+}
+
+input[type="text"], input[type="email"], input[type="number"], input[type="date"], select {
+    background: #fff;
+    color: #111;
+    border: 1px solid #111;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+input[type="file"] {
+    color: #111;
+}
+
+::-webkit-input-placeholder { color: #888; }
+::-moz-placeholder { color: #888; }
+:-ms-input-placeholder { color: #888; }
+::placeholder { color: #888; }
+
+hr {
+    border-top: 1px solid #1111;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+    width: 8px;
+    background: #fff;
+}
+::-webkit-scrollbar-thumb {
+    background: #111;
+    border-radius: 4px;
+}
+
+/* Imagen de portada en tablas */
+.table img {
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+    background: #fff;
+    padding: 2px;
+    border: 1px solid #1112;
+}
+
+/* Links */
+a, .btn-link {
+    color: #111;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+a:hover, .btn-link:hover {
+    color: #333;
+    text-decoration: underline;
+}
+
+/* Topbar fijo sobre el sidebar */
+#topbar {
+    background: #111;
+    color: #fff;
+    padding: 18px 32px;
+    border-bottom: 2px solid #1111;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.topbar-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* Contenedor principal */
+.main-container {
+    min-height: 100vh;
+}
+
+#sidebar {
+    background: #111;
+    border-right: 2px solid #1111;
+    min-height: 100vh;
+    width: 220px;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    z-index: 100;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.10);
+    padding-top: 24px;
+}
+#sidebar ul.components {
+    padding-left: 0;
+    margin-top: 0;
+}
+#sidebar ul.components li {
+    padding: 0.7rem 1.5rem;
+    list-style: none;
+    margin-bottom: 8px;
+}
+#sidebar ul.components li a {
+    color: #fff;
+    font-weight: 500;
+    font-size: 1.08rem;
+    display: block;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+    text-decoration: none;
+    padding: 8px 12px;
+    letter-spacing: 0.5px;
+}
+#sidebar ul.components li a:hover, #sidebar ul.components li a.active {
+    background: #fff;
+    color: #111;
+    text-decoration: none;
+}
+
+/* Ajuste para el contenido principal */
+.flex-grow-1 {
+    margin-left: 220px;
+    min-width: 0;
+    padding-top: 60px;
+}
+
+.main-content {
+    margin-left: 220px;
+    min-width: 0;
+    padding-top: 60px;
+}
+
+#main-content-area {
+    width: 100%;
+    min-height: calc(100vh - 60px);
+    padding: 32px 32px 32px 32px;
+    box-sizing: border-box;
+}
+@media (max-width: 900px) {
+    #main-content-area {
+        padding: 16px 6px 16px 6px;
+    }
+}
+
+@media (max-width: 900px) {
+    #sidebar {
+        width: 100px;
+        padding-top: 12px;
+    }
+    .flex-grow-1 {
+        margin-left: 100px;
+    }
+    #sidebar ul.components li {
+        padding: 0.5rem 0.7rem;
+    }
+    #sidebar ul.components li a {
+        font-size: 0.95rem;
+        padding: 6px 8px;
+    }
+    #topbar {
+        padding: 0 10px;
+        font-size: 1.1rem;
+    }
 }

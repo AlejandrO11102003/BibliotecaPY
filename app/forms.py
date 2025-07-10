@@ -2,6 +2,7 @@ from datetime import datetime, timedelta  # Asegúrate de importar timedelta
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, DateField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Email, Length, ValidationError
+from flask_wtf.file import FileField, FileAllowed
 
 class LibroForm(FlaskForm):
     titulo = StringField('Título', validators=[DataRequired(), Length(max=100)])
@@ -12,6 +13,7 @@ class LibroForm(FlaskForm):
     categoria = StringField('Categoría', validators=[Length(max=50)])
     ejemplares = IntegerField('Ejemplares', validators=[DataRequired()])
     disponibles = IntegerField('Disponibles', validators=[DataRequired()])
+    imagen = FileField('Imagen del libro', validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'Solo imagenes!')])
     submit = SubmitField('Guardar')
 
 class UsuarioForm(FlaskForm):
@@ -27,7 +29,7 @@ class PrestamoForm(FlaskForm):
     usuario_id = SelectField('Usuario', coerce=int, validators=[DataRequired()])
     fecha_prestamo = DateField('Fecha de Préstamo', format='%Y-%m-%d', default=datetime.today)
     fecha_limite = DateField('Fecha Límite', format='%Y-%m-%d', 
-                           default=lambda: datetime.today() + timedelta(days=14))
+                        default=lambda: datetime.today() + timedelta(days=14))
     submit = SubmitField('Registrar Préstamo')
 
 class DevolucionForm(FlaskForm):

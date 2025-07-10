@@ -9,10 +9,11 @@
 </div>
 
 <table class="table table-striped" id="tabla-libros">
-    <thead class="thead-dark">
+    <thead class="thead-black">
         <tr>
             <th>ID</th>
             <th>Título</th>
+            <th>Portada</th>
             <th>Autor</th>
             <th>ISBN</th>
             <th>Disponibles</th>
@@ -24,6 +25,13 @@
         <tr>
             <td>{{ libro.id }}</td>
             <td>{{ libro.titulo }}</td>
+            <td>
+                {% if libro.imagen %}
+                    <img src="{{ url_for('static', filename='img/' ~ libro.imagen) }}" alt="Portada de {{ libro.titulo }}" width="50" height="70">
+                {% else %}
+                    <span class="text-muted">Sin portada</span>
+                {% endif %}
+            </td>
             <td>{{ libro.autor }}</td>
             <td>{{ libro.isbn }}</td>
             <td>{{ libro.disponibles }} / {{ libro.ejemplares }}</td>

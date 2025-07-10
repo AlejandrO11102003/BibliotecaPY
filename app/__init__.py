@@ -15,7 +15,6 @@ def create_app(config_class=Config):
 
     from app.routes import main_bp
     app.register_blueprint(main_bp)
-
     return app
 
 from app import models

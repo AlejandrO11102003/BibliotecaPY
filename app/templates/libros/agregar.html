@@ -2,7 +2,7 @@
 
 {% block content %}
 <h2>Agregar Nuevo Libro</h2>
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     <div class="form-group">
         {{ form.titulo.label }}
@@ -35,6 +35,10 @@
     <div class="form-group">
         {{ form.disponibles.label }}
         {{ form.disponibles(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.imagen.label }}
+        {{ form.imagen(class="form-control-file") }}
     </div>
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a href="{{ url_for('main.listar_libros') }}" class="btn btn-secondary">Cancelar</a>

@@ -15,6 +15,7 @@ class Libro(db.Model):
     ejemplares = db.Column(db.Integer, default=1)
     disponibles = db.Column(db.Integer, default=1)
     prestamos = db.relationship('Prestamo', backref='libro', lazy=True)
+    imagen = db.Column(db.String(120))  #ruta d ela img
 
     def __repr__(self):
         return f'<Libro {self.titulo}>'

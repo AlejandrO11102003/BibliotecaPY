@@ -7,6 +7,15 @@ from datetime import datetime, timedelta
 
 from sqlalchemy import func
 from datetime import datetime
+import os
+from flask import current_app
+from werkzeug.utils import secure_filename
+import numpy as np
+import matplotlib.pyplot as plt
+import io
+import base64
+from app.grafico_numpy import generar_grafico_libros_populares
+
 
 main_bp = Blueprint('main', __name__)
 
@@ -24,6 +33,11 @@ def listar_libros():
 def agregar_libro():
     form = LibroForm()
     if form.validate_on_submit():
+        filename = None
+        if form.imagen.data: 
+            filename = secure_filename(form.imagen.data.filename) 
+            ruta = os.path.join(current_app.root_path, 'static', 'img', filename)
+            form.imagen.data.save(ruta)
         libro = Libro(
             titulo=form.titulo.data,
             autor=form.autor.data,
@@ -32,7 +46,8 @@ def agregar_libro():
             año_publicacion=form.año_publicacion.data,
             categoria=form.categoria.data,
             ejemplares=form.ejemplares.data,
-            disponibles=form.disponibles.data
+            disponibles=form.disponibles.data,
+            imagen=filename 
         )
         db.session.add(libro)
         db.session.commit()
@@ -137,16 +152,16 @@ def eliminar_usuario(id):
 def listar_prestamos():
     prestamos = Prestamo.query.all()
     return render_template('prestamos/listar.html', prestamos=prestamos,
-                         datetime=datetime)
+                        datetime=datetime)
 
 @main_bp.route('/prestamos/nuevo', methods=['GET', 'POST'])
 def nuevo_prestamo():
     form = PrestamoForm()
     # Obtener libros disponibles y usuarios activos
     form.libro_id.choices = [(l.id, f"{l.titulo} - {l.autor}") 
-                           for l in Libro.query.filter(Libro.disponibles > 0).all()]
+                            for l in Libro.query.filter(Libro.disponibles > 0).all()]
     form.usuario_id.choices = [(u.id, f"{u.nombre} {u.apellido}") 
-                             for u in Usuario.query.all()]
+                            for u in Usuario.query.all()]
     
     if form.validate_on_submit():
         libro = Libro.query.get(form.libro_id.data)
@@ -206,21 +221,25 @@ def generar_reportes():
         Libro.titulo,
         func.count(Prestamo.id).label('total_prestamos')
     ).join(Prestamo, Libro.id == Prestamo.libro_id)\
-     .group_by(Libro.id)\
-     .order_by(func.count(Prestamo.id).desc())\
-     .limit(5).all()
-    
-    # Preparar datos para el gráfico
+    .group_by(Libro.id)\
+    .order_by(func.count(Prestamo.id).desc())\
+    .limit(5).all()
+
     labels = [libro.titulo[:20] + '...' if len(libro.titulo) > 20 else libro.titulo for libro in libros_populares]
-    data = [libro.total_prestamos for libro in libros_populares]
-    
+    data = np.array([libro.total_prestamos for libro in libros_populares])
+
+    # crear img con el grafico con numpy+matplolib
+    image_base64 = generar_grafico_libros_populares(libros_populares)
+
     return render_template('reportes/generar.html', 
-                         total_libros=total_libros,
-                         total_usuarios=total_usuarios,
-                         prestamos_activos=prestamos_activos,
-                         prestamos_devueltos=prestamos_devueltos,
-                         prestamos_vencidos=prestamos_vencidos,
-                         prestamos_recientes=prestamos_recientes,
-                         libros_labels=labels,
-                         libros_data=data,
-                         datetime=datetime)
+                        total_libros=total_libros,
+                        total_usuarios=total_usuarios,
+                        prestamos_activos=prestamos_activos,
+                        prestamos_devueltos=prestamos_devueltos,
+                        prestamos_vencidos=prestamos_vencidos,
+                        prestamos_recientes=prestamos_recientes,
+                        libros_labels=labels,
+                        libros_data=data.tolist(),
+                        datetime=datetime,
+                        image_base64=image_base64
+                        )

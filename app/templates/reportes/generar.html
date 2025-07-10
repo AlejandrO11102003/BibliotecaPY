@@ -7,7 +7,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Resumen General</h5>
+                <h5 class="mb-0 text-white">Resumen General</h5>
             </div>
             <div class="card-body">
                 <ul class="list-group">
@@ -39,10 +39,12 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header bg-info text-white">
-                <h5 class="mb-0">Libros más populares</h5>
+                <h5 class="mb-0 text-white">Libros más populares</h5>
             </div>
             <div class="card-body">
-                <canvas id="librosChart" width="100%" height="100"></canvas>
+                <div style="max-width: 400px;">
+                    <img src="data:image/png;base64,{{ image_base64 }}" alt="Gráfico de libros populares" style="width: 100%; height: 100%; object-fit: contain; display: block;" />
+                </div>
             </div>
         </div>
     </div>
@@ -51,7 +53,7 @@
 <div class="mt-4">
     <div class="card">
         <div class="card-header bg-warning text-dark">
-            <h5 class="mb-0">Préstamos recientes</h5>
+            <h5 class="mb-0 text-white">Préstamos recientes</h5>
         </div>
         <div class="card-body">
             <table class="table table-striped">
@@ -90,56 +92,4 @@
     </div>
 </div>
 
-{% endblock %}
-
-{% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('librosChart');
-    
-    // Verifica si tenemos datos antes de crear el gráfico
-    if (ctx) {
-        const chartData = {
-            labels: {{ libros_labels|tojson|safe }},
-            datasets: [{
-                label: 'Préstamos por libro',
-                data: {{ libros_data|tojson|safe }},
-                backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        };
-
-        new Chart(ctx, {
-            type: 'bar',
-            data: chartData,
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    title: {
-                        display: true,
-                        text: 'Libros más prestados'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                }
-            }
-        });
-        
-        console.log('Gráfico creado con datos:', chartData);
-    } else {
-        console.error('No se encontró el elemento canvas para el gráfico');
-    }
-});
-</script>
 {% endblock %}
