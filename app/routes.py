@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, send_file
 from datetime import datetime, timedelta
 import numpy as np
 # repositorios
@@ -14,6 +14,7 @@ from app.factories.model_factory import ModelFactory
 from app.forms import LibroForm, UsuarioForm, PrestamoForm, DevolucionForm
 # util
 from app.grafico_numpy import generar_grafico_libros_populares
+from app.pandas import exportar_reporte_completo_a_excel
 
 main_bp = Blueprint('main', __name__)
 
@@ -54,7 +55,15 @@ def editar_libro(id):
     form = LibroForm(obj=libro)
     if form.validate_on_submit():
         try:
-            # patron factory para actualizar datos del libro
+            # if para saber si hay imagen en la carga del form
+            if form.imagen.data:
+                # si hay, eliminamos la actual
+                if libro.imagen:
+                    FileService.delete_image(libro.imagen) 
+                #y añadimos la nueva img a la carpeta img
+                filename = FileService.save_image(form.imagen.data)
+                libro.imagen = filename
+            # patron factory para enviar los campos del objeto
             form_data = ModelFactory.update_libro_from_form(libro, form)
             libro_repo.update(libro, form_data)
             flash('Libro actualizado correctamente', 'success')
@@ -206,3 +215,19 @@ def generar_reportes():
                         datetime=datetime,
                         image_base64=image_base64
                         )
+
+@main_bp.route('/reportes/exportar_excel')
+def exportar_reporte_excel():
+    stats = report_repo.get_estadisticas_completas()
+    resumen = {
+        'Total de Libros': stats['total_libros'],
+        'Total de Usuarios': stats['total_usuarios'],
+        'Préstamos Activos': stats['prestamos_activos'],
+        'Préstamos Devueltos': stats['prestamos_devueltos'],
+        'Préstamos Vencidos': stats['prestamos_vencidos']
+    }
+    libros_populares = stats['libros_populares']
+    prestamos_recientes = stats['prestamos_recientes']
+
+    output = exportar_reporte_completo_a_excel(resumen, libros_populares, prestamos_recientes)
+    return send_file(output, download_name='reporte_biblioteca.xlsx', as_attachment=True)

@@ -2,7 +2,7 @@
 
 {% block content %}
 <h2>Editar Libro</h2>
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     <div class="form-group">
         {{ form.titulo.label }}
@@ -35,6 +35,14 @@
     <div class="form-group">
         {{ form.disponibles.label }}
         {{ form.disponibles(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.imagen.label }}
+        {{ form.imagen(class="form-control-file") }}
+        {% if libro.imagen %}
+            <p>Imagen actual:</p>
+            <img src="{{ url_for('static', filename='img/' ~ libro.imagen) }}" alt="Portada actual" width="100">
+        {% endif %}
     </div>
     <button type="submit" class="btn btn-primary">Actualizar</button>
     <a href="{{ url_for('main.listar_libros') }}" class="btn btn-secondary">Cancelar</a>

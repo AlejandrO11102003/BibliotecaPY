@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+<a href="{{ url_for('main.exportar_reporte_excel') }}" class="btn btn-success mb-3">
+    <i class="fa fa-file-excel-o"></i> Exportar a Excel
+</a>
 <h2>Reportes de la Biblioteca</h2>
 
 <div class="row">
