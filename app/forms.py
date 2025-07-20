@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta  # Asegúrate de importar timedelta
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, DateField, SelectField, SubmitField
-from wtforms.validators import DataRequired, Email, Length, ValidationError
+from wtforms.validators import DataRequired, Email, Length, ValidationError, Regexp
 from flask_wtf.file import FileField, FileAllowed
 
 class LibroForm(FlaskForm):
@@ -13,14 +13,14 @@ class LibroForm(FlaskForm):
     categoria = StringField('Categoría', validators=[Length(max=50)])
     ejemplares = IntegerField('Ejemplares', validators=[DataRequired()])
     disponibles = IntegerField('Disponibles', validators=[DataRequired()])
-    imagen = FileField('Imagen del libro', validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'Solo imagenes!')])
+    imagen = FileField('Imagen del libro', validators=[FileAllowed(['jpg', 'png', 'jpeg','webp'], 'Solo imagenes!')])
     submit = SubmitField('Guardar')
 
 class UsuarioForm(FlaskForm):
     nombre = StringField('Nombre', validators=[DataRequired(), Length(max=100)])
     apellido = StringField('Apellido', validators=[DataRequired(), Length(max=100)])
     email = StringField('Email', validators=[DataRequired(), Email(), Length(max=120)])
-    telefono = StringField('Teléfono', validators=[Length(max=20)])
+    telefono = StringField('Teléfono', validators=[Length(max=20),Regexp('^[0-9]*$', message='Solo se permiten números en el teléfono')])
     direccion = StringField('Dirección', validators=[Length(max=200)])
     submit = SubmitField('Guardar')
 
