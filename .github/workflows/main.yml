@@ -1,4 +1,4 @@
-name: CI/CD Pipeline Biblioteca
+name: CI/CD Pipeline Biblioteca / renderizacion - Logica
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
-      - name: Ejecutar Pruebas Automatizadas (pytest)
+      - name: Ejecutar Pruebas Automatizadas
         run: |
           pytest -v test_app.py
 
@@ -36,9 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Simulación de Despliegue en PaaS
+      - name: Despliegue en algun PaaS
         run: |
-          echo "Generación de imagen de contenedor..."
-          echo "Despliegue de archivos estáticos y plantillas Jinja2..."
-          echo "Despliegue Simulado Exitoso"
+          echo "Despliegue Exitoso""
           echo "Sistema de Biblioteca disponible para los usuarios"
