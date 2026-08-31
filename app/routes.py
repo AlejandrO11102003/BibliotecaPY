@@ -158,7 +158,6 @@ def nuevo_prestamo():
         try:
             prestamo_data = ModelFactory.create_prestamo_from_form(form)
             prestamo_repo.create(prestamo_data)
-            # Disminuir disponibilidad después de crear el préstamo exitosamente
             libro_repo.decrease_available(form.libro_id.data)
             flash('Préstamo registrado correctamente', 'success')
             return redirect(url_for('main.listar_prestamos'))
