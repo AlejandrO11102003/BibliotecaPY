@@ -1,13 +1,18 @@
 def test_agregar_usuario_post(client, app_instance):
+    print("\n-> PRUEBA 1: Creando usuario 'Pablito' vía POST...")
     datos_formulario = {
-        'nombre': 'Alejandro',
+        'nombre': 'Pablito',
         'apellido': 'Castillo',
-        'email': 'alejandro.test@example.com',
-        'telefono': '987654321'
+        'email': 'pablito@gmail.com',
+        'telefono': '981142779'
     }
+    
     response = client.post('/usuarios/agregar', data=datos_formulario, follow_redirects=True)
     assert response.status_code == 200
     assert b'Usuario agregado correctamente' in response.data
+    
+    print("   user creado exitosamente.")
+
 
 def test_logica_negocio_prestamo(client, app_instance):
     from app.models import Libro, Usuario
@@ -20,18 +25,23 @@ def test_logica_negocio_prestamo(client, app_instance):
         db.session.commit()
         l_id, u_id = libro_prueba.id, usuario_prueba.id
 
+    print(f"\n-> PRUEBA 2: Prestando libro (Stock inicial: 5)...")
     datos_prestamo = {
         'libro_id': l_id,
         'usuario_id': u_id,
         'fecha_prestamo': '2026-08-31',
         'fecha_limite': '2026-09-07'
     }
+    
     response = client.post('/prestamos/nuevo', data=datos_prestamo, follow_redirects=True)
     assert response.status_code == 200
     
     with app_instance.app_context():
         libro_actualizado = Libro.query.get(l_id)
         assert libro_actualizado.disponibles == 4
+        
+    print(f"  prestamo registrado. Stock restante: {libro_actualizado.disponibles}.")
+
 
 def test_eliminar_libro(client, app_instance):
     from app.models import Libro
@@ -43,6 +53,13 @@ def test_eliminar_libro(client, app_instance):
         db.session.commit()
         id_borrar = libro_borrar.id
 
+    print("\n-> PRUEBA 3: Eliminando libro de la base de datos...")
+    
     response = client.post(f'/libros/eliminar/{id_borrar}', follow_redirects=True)
     assert response.status_code == 200
-    assert b'Libro eliminado correctamente' in response.data
+    
+    with app_instance.app_context():
+        libro_inexistente = Libro.query.get(id_borrar)
+        assert libro_inexistente is None
+        
+    print("   Libro eliminado correctamente.")
