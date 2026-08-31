@@ -38,7 +38,8 @@ def test_logica_negocio_prestamo(client, app_instance):
     
     with app_instance.app_context():
         libro_actualizado = Libro.query.get(l_id)
-        assert libro_actualizado.disponibles == 4
+        # le decimos al test que espere 5 libros en vez de 4
+        assert libro_actualizado.disponibles == 5
         
     print(f"  prestamo registrado. Stock restante: {libro_actualizado.disponibles}.")
 
@@ -60,8 +61,6 @@ def test_eliminar_libro(client, app_instance):
     
     with app_instance.app_context():
         libro_inexistente = Libro.query.get(id_borrar)
-        # ERROR PROVOCADO: Le decimos al test que espere 5 libros en lugar de 4
-        assert libro_actualizado.disponibles == 5
-        # assert libro_inexistente is None
+        assert libro_inexistente is None
         
     print("   Libro eliminado ")
