@@ -1,5 +1,5 @@
 def test_agregar_usuario_post(client, app_instance):
-    print("\n-> PRUEBA 1: Creando usuario 'Pablito' vía POST...")
+    print("\n-> PRUEBA 1: Creacion de user 'Pablito' metodo POST")
     datos_formulario = {
         'nombre': 'Pablito',
         'apellido': 'Castillo',
@@ -25,7 +25,7 @@ def test_logica_negocio_prestamo(client, app_instance):
         db.session.commit()
         l_id, u_id = libro_prueba.id, usuario_prueba.id
 
-    print(f"\n-> PRUEBA 2: Prestando libro (Stock inicial: 5)...")
+    print(f"\n-> PRUEBA 2: Prestamo de libro - Stock inicial: 5")
     datos_prestamo = {
         'libro_id': l_id,
         'usuario_id': u_id,
@@ -53,13 +53,15 @@ def test_eliminar_libro(client, app_instance):
         db.session.commit()
         id_borrar = libro_borrar.id
 
-    print("\n-> PRUEBA 3: Eliminando libro de la base de datos...")
+    print("\n-> PRUEBA 3: Eliminacion de libro de la DB")
     
     response = client.post(f'/libros/eliminar/{id_borrar}', follow_redirects=True)
     assert response.status_code == 200
     
     with app_instance.app_context():
         libro_inexistente = Libro.query.get(id_borrar)
-        assert libro_inexistente is None
+        # ERROR PROVOCADO: Le decimos al test que espere 5 libros en lugar de 4
+        assert libro_actualizado.disponibles == 5
+        # assert libro_inexistente is None
         
-    print("   Libro eliminado correctamente.")
+    print("   Libro eliminado ")
