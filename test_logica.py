@@ -38,7 +38,6 @@ def test_logica_negocio_prestamo(client, app_instance):
     
     with app_instance.app_context():
         libro_actualizado = Libro.query.get(l_id)
-        # le decimos al test que espere 5 libros en vez de 4
         assert libro_actualizado.disponibles == 4
         
     print(f"  prestamo registrado. Stock restante: {libro_actualizado.disponibles}.")
